@@ -18,10 +18,13 @@ public class ClientHandler
         this.Server = server;
         this.Client = client;
         this.Stream = client.GetStream();
+        Stream.BeginRead(_buffer, 0, 1024, OnRead, null);
+        
     }
     
     private void OnRead(IAsyncResult readResult)
     {
+        Console.WriteLine("Reading...");
         try
         {
             var numberOfBytes = Stream.EndRead(readResult);
@@ -39,6 +42,7 @@ public class ClientHandler
             if (_totalBuffer.Length >= packetSize + 4)
             {
                 var json = Encoding.UTF8.GetString(_totalBuffer, 4, packetSize);
+                Console.WriteLine($"received message {json}");
                 Server.OnMessage(Client, JObject.Parse(json));
 
                 var newBuffer = new byte[_totalBuffer.Length - packetSize - 4];
