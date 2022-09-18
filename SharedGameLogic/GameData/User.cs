@@ -12,5 +12,6 @@ public class User
     {
         this.Client = client;
         this.Score = 0;
+        this.UserName = "Onbekend";
     }
 }
