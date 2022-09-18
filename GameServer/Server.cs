@@ -13,6 +13,8 @@ public class Server
     private List<TcpClient> _waiters = new();
     private Dictionary<TcpClient, Game> _userList = new();
     private Dictionary<TcpClient, string> _userNames = new();
+
+    private Dictionary<TcpClient, ClientHandler> handler = new();
     private List<TcpClient> _connections = new();
     private List<Game> _games = new();
     
@@ -31,6 +33,8 @@ public class Server
             TcpClient client = _listener.AcceptTcpClient();
             Console.WriteLine("Accepted client");
             this._connections.Add(client);
+            this.handler.Add(client, new ClientHandler(this,client));
+            
             CheckGameStart();
             
            // new Thread(HandleIncommingRequests).Start(client);
@@ -73,6 +77,7 @@ public class Server
 
     public void HandleMessage(TcpClient client, JObject json)
     {
+        Console.WriteLine("Received message");
         Console.WriteLine(json);
     }
 }
