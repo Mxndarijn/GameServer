@@ -11,7 +11,7 @@ public class Game
 {
     private Thread GameThread { get; set; }
     private List<User> _users = new();
-    private string name;
+    private readonly string name;
     public Game(List<ClientData> clients)
     {
         name = "Game-" + new Random().Next(100, 999);
@@ -39,7 +39,7 @@ public class Game
     {
         _users.ForEach(u =>
         {
-            DataCommunication.SendData(u.ClientData.stream, s);
+            DataCommunication.SendData(u.ClientData.Stream, s);
         });
     }
 

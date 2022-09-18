@@ -5,19 +5,21 @@ namespace GameServer;
 
 public class ClientData
 {
-    public ClientHandler handler { get; set; }
-    public TcpClient client { get; set; }
-    public NetworkStream stream { get; set; }
-    public Server server;
+    public ClientHandler Handler { get; set; }
+    public TcpClient Client { get; set; }
+    public NetworkStream Stream { get; set; }
+    public Server Server { get; set; }
+    public string UserName { get; set; }
 
-    public Game game { get; set; }
+    public Game? Game { get; set; }
     
     public ClientData(Server server, TcpClient client)
     {
-        this.server = server;
-        this.client = client;
-        this.stream = client.GetStream();
-        this.handler = new ClientHandler(server, client);
+        this.Server = server;
+        this.Client = client;
+        this.Stream = client.GetStream();
+        this.Game = null;
+        this.Handler = new ClientHandler(server, client);
     }
     
 }

@@ -4,7 +4,7 @@ namespace ClientSide.VR;
 
 public class JsonFileReader
 {
-    private static string pathDir = Environment.CurrentDirectory.Substring(0, Environment.CurrentDirectory.LastIndexOf("Repositories")) + "\\Repositories\\GameServer\\SharedGameLogic\\Json\\";
+    private static string pathDir = Environment.CurrentDirectory.Substring(0, Environment.CurrentDirectory.LastIndexOf("GameServerSolution")) + "\\GameServerSolution\\SharedGameLogic\\Json\\";
 
     /// <summary>
     /// It takes a file name and a dictionary of values, and returns a JObject with the values replaced

@@ -40,9 +40,9 @@ class Client
                 Thread.Sleep(5);
             }
         }
-        catch
+        catch(Exception exception)
         {
-            Console.WriteLine("Could not connect with server...");
+            Console.WriteLine($"Could not connect with server... {exception}");
         }
     }
 
@@ -56,7 +56,6 @@ class Client
                 break;
             }
         }
-        File.WriteAllText(@"C:\Users\Richa\Documents\Repositories\GameServer\GameClient\ResponseTest.json", json.ToString());
     }
 
     public void WriteMessageToServer(string message)
