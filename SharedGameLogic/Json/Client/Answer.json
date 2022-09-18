@@ -1,5 +1,6 @@
 {
-  "id": "answer",
+  "id": "game-message",
+  "id2": "answer",
   "data": {
     "answer": "_answer_"
   }

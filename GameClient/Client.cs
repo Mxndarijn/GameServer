@@ -69,6 +69,19 @@ class Client
                 })));
                 break;
             }
+
+            case "question-response":
+            {
+                if (json["data"]["answerResponse"].ToObject<string>().ToLower().Equals("correct"))
+                {
+                    Console.WriteLine("You answered correctly!");
+                }
+                else
+                {
+                    Console.WriteLine("Your answer was wrong. Try again!");
+                }
+                break;
+            }
         }
     }
 

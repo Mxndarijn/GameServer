@@ -73,6 +73,15 @@ public class Server
                 CheckGameStart();
                 break;
             }
+
+            case "game-message":
+            {
+                if (data.Game != null)
+                {
+                    data.Game.HandleGameMessage(data, json);
+                }
+                break;
+            }
         }
         
         string username = data.UserName != null ? data.UserName : "(GeenUserName)";
