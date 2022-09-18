@@ -93,10 +93,8 @@ class Client
             if (_totalBuffer.Length >= packetSize + 4)
             {
                 var json = Encoding.UTF8.GetString(_totalBuffer, 4, packetSize);
-                while (!json.StartsWith("{"))
-                {
-                    json = json.Substring(1, json.Length);
-                }
+                //Console.WriteLine(json);
+               // json = json.Substring(json.IndexOf("{"), json.Length-1);
                 Console.WriteLine($"Received ... {json}");
                 
                 OnMessage?.Invoke(this, JObject.Parse(json));
