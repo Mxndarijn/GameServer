@@ -24,7 +24,7 @@ class Client
             Console.WriteLine("Please enter your username: ");
             _username = Console.ReadLine();
             
-            WriteMessageToServer(_username);
+            DataCommunication.SendData(_stream, _username);
             
             _stream = _client.GetStream();
             _stream.BeginRead(_buffer, 0, 1024, OnRead, null);
