@@ -15,16 +15,19 @@ class Client
     public Client()
     {
         OnMessage += async (_, json) => await ProcessMessageAsync(json);
-
-        bool connected = true;
+        
         try
         {
             _client = new("84.26.134.162", 2460);
             WriteMessageToServer("RequestConnection");
-            
-            Console.WriteLine("Waiting for game to start");
             _stream = _client.GetStream();
             _stream.BeginRead(_buffer, 0, 1024, OnRead, null);
+            Console.WriteLine("Waiting for game to start");
+            while (true)
+            {
+                
+                Thread.Sleep(5);
+            }
         }
         catch
         {
