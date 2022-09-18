@@ -9,7 +9,7 @@ class Client
     {
         try
         {
-            _client = new("86.95.122.200", 2460);
+            _client = new("84.26.134.162", 2460);
             WriteMessageToServer("RequestConnection");
         }
         catch

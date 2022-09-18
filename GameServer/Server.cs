@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using SharedGameLogic.GameData;
 
 namespace GameServer;
 
@@ -8,37 +9,48 @@ public class Server
 {
     private TcpListener _listener;
 
+    private List<TcpClient> _waiters = new();
+    private Dictionary<TcpClient, Game> _userList = new();
+    private List<Game> _games = new();
+
     public Server()
     {
-        IPAddress localhost = IPAddress.Parse("127.0.0.1");
-        _listener = new TcpListener(localhost, 2460);
+        _listener = new TcpListener(IPAddress.Any, 2460);
         _listener.Start();
-        
         while (true)
         {
             Console.WriteLine("Waiting for connection");
-        
             TcpClient client = _listener.AcceptTcpClient();
-
             Console.WriteLine("Accepted client");
+            this._waiters.Add(client);
+            CheckGameStart();
             
-            new Thread(HandleIncommingRequests).Start(client);
+           // new Thread(HandleIncommingRequests).Start(client);
         }
     }
 
-    public void HandleIncommingRequests(object obj)
+    public void CheckGameStart()
+    {
+        if (_waiters.Count >= 2)
+        {
+            Game game = new Game(_waiters);
+            _games.Add(game);
+            foreach (var client in _waiters)
+            {
+                _userList.Add(client, game);
+            }
+            _waiters.Clear();
+            Console.WriteLine("Game Created");
+        }
+    }
+
+    public void HandleIncomingRequests(object obj)
     {
         TcpClient client = obj as TcpClient;
-
-        bool done = false;
-        while (!done)
+        while (true)
         {
             string received = ReadTextMessage(client);
             Console.WriteLine("Received: {0}", received);
-
-            done = received.Equals("bye");
-            if (done) WriteTextMessage(client, "BYE");
-            else WriteTextMessage(client, "OK");
         }
         client.Close();
         Console.WriteLine("Connection closed");
