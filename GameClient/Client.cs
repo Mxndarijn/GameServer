@@ -1,6 +1,7 @@
 ﻿using System.Net.Sockets;
 using System.Text;
 using System.Threading.Channels;
+using ClientSide.VR;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -18,7 +19,7 @@ class Client
         
         try
         {
-            _client = new("84.26.134.162", 2460);
+            _client = new("127.0.0.1", 2460); // 84.26.134.162
             WriteMessageToServer("RequestConnection");
             _stream = _client.GetStream();
             _stream.BeginRead(_buffer, 0, 1024, OnRead, null);
@@ -35,9 +36,17 @@ class Client
         }
     }
 
-    private async Task ProcessMessageAsync(string json)
+    private async Task ProcessMessageAsync(JObject json)
     {
-        throw new NotImplementedException();
+        switch (json["id"].ToObject<string>())
+        {
+            case "game-created":
+            {
+                Console.WriteLine($"Game created: {json["data"]["name"]}");
+                break;
+            }
+        }
+        File.WriteAllText(@"C:\Users\Richa\Documents\Repositories\GameServer\GameClient\ResponseTest.json", json.ToString());
     }
 
     public void WriteMessageToServer(string message)
@@ -68,7 +77,7 @@ class Client
             if (_totalBuffer.Length >= packetSize + 4)
             {
                 var json = Encoding.UTF8.GetString(_totalBuffer, 4, packetSize);
-                OnMessage?.Invoke(this, json);
+                OnMessage?.Invoke(this, JObject.Parse(json));
 
                 var newBuffer = new byte[_totalBuffer.Length - packetSize - 4];
                 Array.Copy(_totalBuffer, packetSize + 4, newBuffer, 0, newBuffer.Length);
@@ -82,7 +91,7 @@ class Client
         _stream.BeginRead(_buffer, 0, 1024, OnRead, null);
     }
 
-    public event EventHandler<string> OnMessage;
+    public event EventHandler<JObject> OnMessage;
 
     private static byte[] Concat(byte[] b1, byte[] b2, int count)
     {
