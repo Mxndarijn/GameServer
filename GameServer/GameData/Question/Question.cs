@@ -23,7 +23,7 @@ public class Question
         Random r = new Random();
         value1 = r.Next(3, 50);
         value2 = r.Next(3, 50);
-        Operator op = _operators[r.Next(1, 5)];
+        Operator op = _operators[r.Next(0, 4)];
         answer = op.calculate(value1, value2);
         Message = $"{value1} {op.getOperator()} {value2}";
     }

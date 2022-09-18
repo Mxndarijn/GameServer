@@ -1,4 +1,5 @@
-﻿using System.Net.Sockets;
+﻿using System.Collections.Concurrent;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Channels;
 using ClientSide.VR;
@@ -86,6 +87,12 @@ class Client
             if (_totalBuffer.Length >= packetSize + 4)
             {
                 var json = Encoding.UTF8.GetString(_totalBuffer, 4, packetSize);
+                while (!json.StartsWith("{"))
+                {
+                    json = json.Substring(1, json.Length);
+                }
+                Console.WriteLine($"Received ... {json}");
+                
                 OnMessage?.Invoke(this, JObject.Parse(json));
 
                 var newBuffer = new byte[_totalBuffer.Length - packetSize - 4];
