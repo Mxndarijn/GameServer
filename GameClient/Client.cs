@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Channels;
 using ClientSide.VR;
+using GameClient;
 using Microsoft.VisualBasic.CompilerServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -15,6 +16,8 @@ class Client
 
     private byte[] _totalBuffer = Array.Empty<byte>();
     private readonly byte[] _buffer = new byte[1024];
+
+    private Dictionary<int, Question> questions = new();
 
     public Client()
     {
@@ -60,37 +63,18 @@ class Client
 
             case "question":
             {
-                Console.WriteLine($"Question: \n {json["data"]["question"]}");
-                Console.WriteLine("Type your answer: ");
-                string answer = Console.ReadLine();
-                DataCommunication.SendData(_stream, (JsonFileReader.GetObjectAsString("Client\\Answer", new Dictionary<string, string>()
-                {
-                    {"_answer_", answer}
-                })));
+                Question question = new Question(json, _stream);
+                questions.Add(question.Id, question);
                 break;
             }
 
             case "question-response":
             {
-                if (json["data"]["answerResponse"].ToObject<string>().ToLower().Equals("correct"))
-                {
-                    Console.WriteLine("You answered correctly!");
-                }
-                else
-                {
-                    Console.WriteLine("Your answer was wrong. Try again!");
-                }
+                int id = IntegerType.FromString(json["data"]["question-id"].ToObject<string>());
+                Question q = questions[id];
+                q.HandleResponse(json);
                 break;
             }
-        }
-    }
-
-    public void WriteMessageToServer(string message)
-    {
-        var stream = new StreamWriter(_client.GetStream(), Encoding.ASCII);
-        {
-            stream.WriteLine(message);
-            stream.Flush();
         }
     }
 
@@ -101,7 +85,7 @@ class Client
             var numberOfBytes = _stream.EndRead(readResult);
             _totalBuffer = Concat(_totalBuffer, _buffer, numberOfBytes);
         }
-        catch (Exception ex)
+        catch
         {
             return;
         }
@@ -110,12 +94,12 @@ class Client
         {
             var packetSize = BitConverter.ToInt32(_totalBuffer, 0);
 
-            if (_totalBuffer.Length >= packetSize + 4)
+            if (_totalBuffer.Length >= packetSize + 4) 
             {
                 var json = Encoding.UTF8.GetString(_totalBuffer, 4, packetSize);
                 //Console.WriteLine(json);
                // json = json.Substring(json.IndexOf("{"), json.Length-1);
-                Console.WriteLine($"Received ... {json}");
+                //Console.WriteLine($"Received ... {json}");
                 
                 OnMessage?.Invoke(this, JObject.Parse(json));
 

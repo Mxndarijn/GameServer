@@ -38,7 +38,7 @@ public class Server
 
     public void CheckGameStart()
     {
-        if (_waiters.Count >= 1)
+        if (_waiters.Count >= 2)
         {
             Game game = new Game(_waiters);
             _games.Add(game);

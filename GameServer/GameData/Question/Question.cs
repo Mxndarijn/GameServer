@@ -10,6 +10,7 @@ public class Question
     private int value1;
     private int value2;
     private int answer;
+    public int id { get; }
     private static List<Operator> _operators = new()
     {
         new Add(),
@@ -26,6 +27,7 @@ public class Question
         Operator op = _operators[r.Next(0, 4)];
         answer = op.calculate(value1, value2);
         Message = $"{value1} {op.getOperator()} {value2}";
+        id = r.Next(100000, 500000);
     }
 
     public bool CheckAnswer(User u, int a)
@@ -42,7 +44,8 @@ public class Question
     {
         return JsonFileReader.GetObjectAsString("Server\\Question", new Dictionary<string, string>()
         {
-            { "_question_", Message }
+            { "_question_", Message },
+            {"_id_", id.ToString()}
         });
     }
 }

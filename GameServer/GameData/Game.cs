@@ -42,7 +42,14 @@ public class Game
             
             SendMessageToAllUsers(currentQuestion.GetMessageToJson());
             
-            Thread.Sleep(10000);
+            Thread.Sleep(30000);
+            
+            SendMessageToAllUsers(JsonFileReader.GetObjectAsString("Server\\AnswerResponse", new Dictionary<string, string>()
+            {
+                {"_answer_", "no-time"},
+                {"_questionId_", currentQuestion.id.ToString()}
+                            
+            }));
         }
     }
 
@@ -73,14 +80,17 @@ public class Game
                     {
                         SendMessageToUser(GetUserByClientData(data), JsonFileReader.GetObjectAsString("Server\\AnswerResponse", new Dictionary<string, string>()
                         {
-                            {"_answer_", "Correct"}
+                            {"_answer_", "Correct"},
+                            {"_questionId_", json["data"]["question-id"].ToObject<string>()}
+                            
                         }));
                     }
                     else
                     {
                         SendMessageToUser(GetUserByClientData(data), JsonFileReader.GetObjectAsString("Server\\AnswerResponse", new Dictionary<string, string>()
                         {
-                            {"_answer_", "That is not the correct answer"}
+                            {"_answer_", "Wrong"},
+                            {"_questionId_", json["data"]["question-id"].ToObject<string>()}
                         }));
                     }
                 }
