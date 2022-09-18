@@ -11,7 +11,7 @@ public class Server
     private TcpListener _listener;
 
     private List<ClientData> _waiters = new();
-    private List<ClientData> _users = new();
+    private List<ClientData?> _users = new();
     private List<Game> _games = new();
     
     public delegate void MessageReceived(TcpClient client, JObject json);
@@ -38,49 +38,58 @@ public class Server
 
     public void CheckGameStart()
     {
-        if (_waiters.Count >= 2)
+        if (_waiters.Count >= 1)
         {
             Game game = new Game(_waiters);
             _games.Add(game);
             foreach (var client in _waiters)
             {
-                client.game = game;
+                client.Game = game;
             }
             _waiters.Clear();
             Console.WriteLine("Game Created");
         }
     }
     
-    
-    public static void WriteTextMessage(TcpClient client, string message)
-    {
-        var stream = new StreamWriter(client.GetStream(), Encoding.ASCII, -1, true);
-        {
-            stream.WriteLine(message);
-            stream.Flush();
-        }
-    }
-
-    public static string ReadTextMessage(TcpClient client)
-    {
-        var stream = new StreamReader(client.GetStream(), Encoding.ASCII);
-        {
-            return stream.ReadLine();
-        }
-    }
-
-
     public void HandleMessage(TcpClient client, JObject json)
     {
+        ClientData? data = GetClientDataByTcpClient(client);
+        if (data == null)
+        {
+            Console.WriteLine($"Received message from unkown source: \n {json}");
+            return;
+        }
         switch (json["id"].ToObject<string>())
         {
             case "username":
             {
-                
+                data.UserName = json["data"]["name"].ToObject<string>();
+                Console.WriteLine("Username updated...");
+                if (data.Game == null && !_waiters.Contains(data))
+                {
+                    Console.WriteLine($"Added {data.UserName} to the waiting list for a game");
+                    _waiters.Add(data);
+                }
+                CheckGameStart();
                 break;
             }
         }
-        Console.WriteLine("Received message");
+        
+        string username = data.UserName != null ? data.UserName : "(GeenUserName)";
+        Console.WriteLine($"Received message from {username}");
         Console.WriteLine(json);
+    }
+
+    private ClientData? GetClientDataByTcpClient(TcpClient client)
+    {
+        try
+        {
+            ClientData data = _users.First(u => u != null && u.Client == client)!;
+            return data;
+        }
+        catch
+        {
+            return null;
+        }
     }
 }

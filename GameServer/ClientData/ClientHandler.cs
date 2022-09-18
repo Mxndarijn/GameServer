@@ -31,6 +31,7 @@ public class ClientHandler
         }
         catch (Exception ex)
         {
+            Console.WriteLine($"Exception: {ex}");
             return;
         }
 
