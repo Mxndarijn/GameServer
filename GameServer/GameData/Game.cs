@@ -12,6 +12,8 @@ public class Game
     private Thread GameThread { get; set; }
     private List<User> _users = new();
     private readonly string name;
+    private List<Question> _questions = new();
+    private Question currentQuestion;
     public Game(List<ClientData> clients)
     {
         name = "Game-" + new Random().Next(100, 999);
@@ -32,7 +34,13 @@ public class Game
 
     public void Run()
     {
-        
+        while (true)
+        {
+            currentQuestion = new Question();
+            _questions.Add(currentQuestion);
+            
+            SendMessageToAllUsers(currentQuestion.GetMessageToJson());
+        }
     }
 
     public void SendMessageToAllUsers(string s)

@@ -1,3 +1,4 @@
+using ClientSide.VR;
 using SharedGameLogic.GameData.Operators;
 
 namespace SharedGameLogic.GameData;
@@ -35,6 +36,12 @@ public class Question
         }
         return a == answer;
     }
-    
-    
+
+    public string GetMessageToJson()
+    {
+        return JsonFileReader.GetObjectAsString("Server\\Question", new Dictionary<string, string>()
+        {
+            { "_question_", Message }
+        });
+    }
 }
