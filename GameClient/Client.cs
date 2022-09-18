@@ -21,10 +21,14 @@ class Client
         try
         {
             _client = new("84.26.134.162", 2460); // 84.26.134.162
+            DataCommunication.SendData(_stream, "{\"id\": \" \"}");
             Console.WriteLine("Please enter your username: ");
             _username = Console.ReadLine();
             
-            DataCommunication.SendData(_stream, _username);
+            DataCommunication.SendData(_stream, (JsonFileReader.GetObjectAsString("Server\\GameCreated", new Dictionary<string, string>()
+                {
+                    {"_name_", _username}
+                })));
             
             _stream = _client.GetStream();
             _stream.BeginRead(_buffer, 0, 1024, OnRead, null);
