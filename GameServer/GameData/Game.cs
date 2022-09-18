@@ -21,13 +21,14 @@ public class Game
         {
             _users.Add(new User(client));
         }
-        GameThread = new Thread(Run);
-        GameThread.Start();
-        
         SendMessageToAllUsers(JsonFileReader.GetObjectAsString("Server\\GameCreated", new Dictionary<string, string>()
         {
             {"_name_", name}
         }));
+        Thread.Sleep(10);
+        GameThread = new Thread(Run);
+        GameThread.Start();
+        
         
         
     }
@@ -40,6 +41,8 @@ public class Game
             _questions.Add(currentQuestion);
             
             SendMessageToAllUsers(currentQuestion.GetMessageToJson());
+            
+            Thread.Sleep(100000);
         }
     }
 
