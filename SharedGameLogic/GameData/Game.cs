@@ -9,15 +9,24 @@ namespace SharedGameLogic.GameData;
 public class Game
 {
     private Thread GameThread { get; set; }
-    private List<User> _users;
+    private List<User> _users = new();
+    private string name;
     public Game(List<TcpClient> clients)
     {
+        name = "Game-" + new Random().Next(100, 999);
         foreach (var client in clients)
         {
             _users.Add(new User(client));
         }
         GameThread = new Thread(Run);
         GameThread.Start();
+        
+        SendMessageToAllUsers(JsonFileReader.GetObjectAsString("Server\\GameCreated", new Dictionary<string, string>()
+        {
+            {"_name_", name}
+        }));
+        
+        
     }
 
     public void Run()
@@ -29,7 +38,7 @@ public class Game
     {
         _users.ForEach(u =>
         {
-            DataCommunication.WriteTextMessage(u.Client, s);
+            DataCommunication.SendData(u.Stream, s);
         });
     }
 

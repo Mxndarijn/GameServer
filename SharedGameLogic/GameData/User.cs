@@ -5,6 +5,7 @@ namespace SharedGameLogic.GameData;
 public class User
 {
     public TcpClient Client { get; private set; }
+    public NetworkStream Stream { get; private set; }
     public int Score { get; set; }
     public string UserName { get; set; }
     
@@ -13,5 +14,6 @@ public class User
         this.Client = client;
         this.Score = 0;
         this.UserName = "Onbekend";
+        this.Stream = Client.GetStream();
     }
 }

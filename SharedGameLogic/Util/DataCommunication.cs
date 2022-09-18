@@ -5,13 +5,14 @@ namespace ClientSide.VR;
 
 public class DataCommunication
 {
-    public static void WriteTextMessage(TcpClient client, string message)
+
+    public static void SendData(NetworkStream stream, String s)
     {
-        var stream = new StreamWriter(client.GetStream(), Encoding.ASCII, -1, true);
-        {
-            stream.WriteLine(message);
-            stream.Flush();
-        }
+        Console.WriteLine($"Sending data: {s}");
+        Byte[] data = BitConverter.GetBytes(s.Length);
+        Byte[] comman = System.Text.Encoding.ASCII.GetBytes(s);
+        stream.Write(data, 0, data.Length);
+        stream.Write(comman, 0, comman.Length);
     }
 
     public static string ReadTextMessage(TcpClient client)
