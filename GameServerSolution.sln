@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameServer", "GameServer\Ga
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameClient", "GameClient\GameClient.csproj", "{A3D6E17B-36AA-49A8-86E2-60744F109AD4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedGameLogic", "SharedGameLogic\SharedGameLogic.csproj", "{8DDD07B3-54DE-494F-A5BA-204B4C109B9C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedGameLogic", "SharedGameLogic\SharedGameLogic.csproj", "{233FDB32-051A-4CCB-9D79-B9806285717C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,9 +20,9 @@ Global
 		{A3D6E17B-36AA-49A8-86E2-60744F109AD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3D6E17B-36AA-49A8-86E2-60744F109AD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3D6E17B-36AA-49A8-86E2-60744F109AD4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8DDD07B3-54DE-494F-A5BA-204B4C109B9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8DDD07B3-54DE-494F-A5BA-204B4C109B9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8DDD07B3-54DE-494F-A5BA-204B4C109B9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8DDD07B3-54DE-494F-A5BA-204B4C109B9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{233FDB32-051A-4CCB-9D79-B9806285717C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{233FDB32-051A-4CCB-9D79-B9806285717C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{233FDB32-051A-4CCB-9D79-B9806285717C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{233FDB32-051A-4CCB-9D79-B9806285717C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

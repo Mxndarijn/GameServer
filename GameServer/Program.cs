@@ -1,3 +1,11 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿namespace GameServer
+{
 
-Console.WriteLine("Hello, World!");
+    class GameServer
+    {
+        public static void Main(string[] args)
+        {
+            Server server = new Server();
+        }
+    }
+}

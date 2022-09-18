@@ -1,3 +1,10 @@
-﻿// See https://aka.ms/new-console-template for more information
+namespace GameClient;
 
-Console.WriteLine("Hello, World!");
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        Client client = new Client();
+        Console.WriteLine("Client Created");
+    }
+}
