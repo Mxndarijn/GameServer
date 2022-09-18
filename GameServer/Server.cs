@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Newtonsoft.Json.Linq;
 using SharedGameLogic.GameData;
 
 namespace GameServer;
@@ -11,10 +12,17 @@ public class Server
 
     private List<TcpClient> _waiters = new();
     private Dictionary<TcpClient, Game> _userList = new();
+    private Dictionary<TcpClient, string> _userNames = new();
+    private List<TcpClient> _connections = new();
     private List<Game> _games = new();
+    
+    public delegate void MessageReceived(TcpClient client, JObject json);
+
+    public MessageReceived OnMessage { get; }
 
     public Server()
     {
+        OnMessage = HandleMessage;
         _listener = new TcpListener(IPAddress.Any, 2460);
         _listener.Start();
         while (true)
@@ -22,7 +30,7 @@ public class Server
             Console.WriteLine("Waiting for connection");
             TcpClient client = _listener.AcceptTcpClient();
             Console.WriteLine("Accepted client");
-            this._waiters.Add(client);
+            this._connections.Add(client);
             CheckGameStart();
             
            // new Thread(HandleIncommingRequests).Start(client);
@@ -43,18 +51,7 @@ public class Server
             Console.WriteLine("Game Created");
         }
     }
-
-    public void HandleIncomingRequests(object obj)
-    {
-        TcpClient client = obj as TcpClient;
-        while (true)
-        {
-            string received = ReadTextMessage(client);
-            Console.WriteLine("Received: {0}", received);
-        }
-        client.Close();
-        Console.WriteLine("Connection closed");
-    }
+    
     
     public static void WriteTextMessage(TcpClient client, string message)
     {
@@ -71,5 +68,11 @@ public class Server
         {
             return stream.ReadLine();
         }
+    }
+
+
+    public void HandleMessage(TcpClient client, JObject json)
+    {
+        Console.WriteLine(json);
     }
 }
