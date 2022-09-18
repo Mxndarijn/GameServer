@@ -40,6 +40,8 @@ public class Game
             _questions.Add(currentQuestion);
             
             SendMessageToAllUsers(currentQuestion.GetMessageToJson());
+            
+            Thread.Sleep(10000);
         }
     }
 

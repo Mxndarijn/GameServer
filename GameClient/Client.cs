@@ -21,7 +21,7 @@ class Client
         
         try
         {
-            _client = new("84.26.134.162", 2460); // 84.26.134.162
+            _client = new("127.0.0.1", 2460); // 84.26.134.162
             _stream = _client.GetStream();
             
             DataCommunication.SendData(_stream, "{\"id\": \" \"}");
@@ -54,6 +54,12 @@ class Client
             case "game-created":
             {
                 Console.WriteLine($"Game created: {json["data"]["name"]}");
+                break;
+            }
+
+            case "question":
+            {
+                Console.WriteLine($"Question: \n {json["data"]["question"]}");
                 break;
             }
         }
