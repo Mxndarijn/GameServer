@@ -42,7 +42,7 @@ public class Game
             
             SendMessageToAllUsers(currentQuestion.GetMessageToJson());
             
-            Thread.Sleep(100000);
+            Thread.Sleep(10000);
         }
     }
 
@@ -51,7 +51,60 @@ public class Game
         _users.ForEach(u =>
         {
             DataCommunication.SendData(u.ClientData.Stream, s);
+            u.ClientData.Stream.Flush();
         });
     }
 
+    public void SendMessageToUser(User u, string s)
+    {
+        DataCommunication.SendData(u.ClientData.Stream, s);
+        u.ClientData.Stream.Flush();
+    }
+
+    public void HandleGameMessage(ClientData data, JObject json)
+    {
+        switch (json["id2"].ToObject<string>())
+        {
+            case "answer":
+            {
+                try
+                {
+                    if (currentQuestion.CheckAnswer(GetUserByClientData(data), json["data"]["answer"].ToObject<int>()))
+                    {
+                        SendMessageToUser(GetUserByClientData(data), JsonFileReader.GetObjectAsString("Server\\AnswerResponse", new Dictionary<string, string>()
+                        {
+                            {"_answer_", "Correct"}
+                        }));
+                    }
+                    else
+                    {
+                        SendMessageToUser(GetUserByClientData(data), JsonFileReader.GetObjectAsString("Server\\AnswerResponse", new Dictionary<string, string>()
+                        {
+                            {"_answer_", "That is not the correct answer"}
+                        }));
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+                break;
+            }
+        }
+    }
+
+    public User GetUserByClientData(ClientData data)
+    {
+        {
+            try
+            {
+                User user = _users.First(u => u != null && u.ClientData == data)!;
+                return user;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+    }
 }

@@ -21,5 +21,5 @@ public class ClientData
         this.Game = null;
         this.Handler = new ClientHandler(server, client);
     }
-    
+
 }

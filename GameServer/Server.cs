@@ -38,7 +38,7 @@ public class Server
 
     public void CheckGameStart()
     {
-        if (_waiters.Count >= 2)
+        if (_waiters.Count >= 1)
         {
             Game game = new Game(_waiters);
             _games.Add(game);
@@ -71,6 +71,15 @@ public class Server
                     _waiters.Add(data);
                 }
                 CheckGameStart();
+                break;
+            }
+
+            case "game-message":
+            {
+                if (data.Game != null)
+                {
+                    data.Game.HandleGameMessage(data, json);
+                }
                 break;
             }
         }

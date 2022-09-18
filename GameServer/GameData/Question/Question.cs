@@ -33,6 +33,7 @@ public class Question
         if (a == answer)
         {
             CorrectUsers.Add(u);
+            u.Score++;
         }
         return a == answer;
     }

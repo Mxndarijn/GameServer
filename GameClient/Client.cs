@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Channels;
 using ClientSide.VR;
+using Microsoft.VisualBasic.CompilerServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -21,7 +22,7 @@ class Client
         
         try
         {
-            _client = new("84.26.134.162", 2460); // 84.26.134.162
+            _client = new("127.0.0.1", 2460); // 84.26.134.162
             _stream = _client.GetStream();
             
             DataCommunication.SendData(_stream, "{\"id\": \" \"}");
@@ -54,6 +55,31 @@ class Client
             case "game-created":
             {
                 Console.WriteLine($"Game created: {json["data"]["name"]}");
+                break;
+            }
+
+            case "question":
+            {
+                Console.WriteLine($"Question: \n {json["data"]["question"]}");
+                Console.WriteLine("Type your answer: ");
+                string answer = Console.ReadLine();
+                DataCommunication.SendData(_stream, (JsonFileReader.GetObjectAsString("Client\\Answer", new Dictionary<string, string>()
+                {
+                    {"_answer_", answer}
+                })));
+                break;
+            }
+
+            case "question-response":
+            {
+                if (json["data"]["answerResponse"].ToObject<string>().ToLower().Equals("correct"))
+                {
+                    Console.WriteLine("You answered correctly!");
+                }
+                else
+                {
+                    Console.WriteLine("Your answer was wrong. Try again!");
+                }
                 break;
             }
         }
