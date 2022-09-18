@@ -9,6 +9,7 @@ class Client
 {
     private TcpClient _client;
     private NetworkStream _stream;
+    private string _username;
 
     private byte[] _totalBuffer = Array.Empty<byte>();
     private readonly byte[] _buffer = new byte[1024];
@@ -19,8 +20,12 @@ class Client
         
         try
         {
-            _client = new("127.0.0.1", 2460); // 84.26.134.162
-            WriteMessageToServer("RequestConnection");
+            _client = new("84.26.134.162", 2460); // 84.26.134.162
+            Console.WriteLine("Please enter your username: ");
+            _username = Console.ReadLine();
+            
+            WriteMessageToServer(_username);
+            
             _stream = _client.GetStream();
             _stream.BeginRead(_buffer, 0, 1024, OnRead, null);
             Console.WriteLine("Waiting for game to start");
