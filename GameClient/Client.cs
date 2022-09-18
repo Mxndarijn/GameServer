@@ -27,7 +27,7 @@ class Client
             Console.WriteLine("Please enter your username: ");
             _username = Console.ReadLine();
             
-            DataCommunication.SendData(_stream, (JsonFileReader.GetObjectAsString("Server\\GameCreated", new Dictionary<string, string>()
+            DataCommunication.SendData(_stream, (JsonFileReader.GetObjectAsString("Client\\Username", new Dictionary<string, string>()
                 {
                     {"_name_", _username}
                 })));
