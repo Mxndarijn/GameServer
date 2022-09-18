@@ -3,7 +3,7 @@ using System.Text;
 
 class Program
 {
-    static TcpClient client = new TcpClient("84.26.134.162", 2460);
+    static TcpClient client = new TcpClient("127.0.0.1", 2460);
 
     public static void Main(string[] args)
     {
@@ -18,7 +18,7 @@ class Program
 
             string response = ReadResponseMessage();
             Console.WriteLine($"Response from server: {response}");
-            if (response.ToLower().Equals("quit"))
+            if (response.ToLower().Equals("bye"))
             {
                 running = false;
             }
