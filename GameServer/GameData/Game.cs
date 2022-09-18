@@ -43,7 +43,6 @@ public class Game
             SendMessageToAllUsers(currentQuestion.GetMessageToJson());
             
             Thread.Sleep(10000);
-            Thread.Sleep(100000);
         }
     }
 

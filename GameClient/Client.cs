@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Channels;
 using ClientSide.VR;
+using Microsoft.VisualBasic.CompilerServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -60,6 +61,12 @@ class Client
             case "question":
             {
                 Console.WriteLine($"Question: \n {json["data"]["question"]}");
+                Console.WriteLine("Type your answer: ");
+                string answer = Console.ReadLine();
+                DataCommunication.SendData(_stream, (JsonFileReader.GetObjectAsString("Client\\Answer", new Dictionary<string, string>()
+                {
+                    {"_answer_", answer}
+                })));
                 break;
             }
         }
