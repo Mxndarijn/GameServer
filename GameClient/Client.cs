@@ -21,6 +21,8 @@ class Client
         try
         {
             _client = new("84.26.134.162", 2460); // 84.26.134.162
+            _stream = _client.GetStream();
+            
             DataCommunication.SendData(_stream, "{\"id\": \" \"}");
             Console.WriteLine("Please enter your username: ");
             _username = Console.ReadLine();
@@ -29,9 +31,8 @@ class Client
                 {
                     {"_name_", _username}
                 })));
-            
-            _stream = _client.GetStream();
             _stream.BeginRead(_buffer, 0, 1024, OnRead, null);
+            
             Console.WriteLine("Waiting for game to start");
             while (true)
             {
