@@ -10,12 +10,8 @@ public class Server
 {
     private TcpListener _listener;
 
-    private List<TcpClient> _waiters = new();
-    private Dictionary<TcpClient, Game> _userList = new();
-    private Dictionary<TcpClient, string> _userNames = new();
-
-    private Dictionary<TcpClient, ClientHandler> handler = new();
-    private List<TcpClient> _connections = new();
+    private List<ClientData> _waiters = new();
+    private List<ClientData> _users = new();
     private List<Game> _games = new();
     
     public delegate void MessageReceived(TcpClient client, JObject json);
@@ -32,9 +28,8 @@ public class Server
             Console.WriteLine("Waiting for connection");
             TcpClient client = _listener.AcceptTcpClient();
             Console.WriteLine("Accepted client");
-            this._connections.Add(client);
-            this.handler.Add(client, new ClientHandler(this,client));
-            
+            this._users.Add(new ClientData(this, client));
+
             CheckGameStart();
             
            // new Thread(HandleIncommingRequests).Start(client);
@@ -49,7 +44,7 @@ public class Server
             _games.Add(game);
             foreach (var client in _waiters)
             {
-                _userList.Add(client, game);
+                client.game = game;
             }
             _waiters.Clear();
             Console.WriteLine("Game Created");
@@ -77,6 +72,14 @@ public class Server
 
     public void HandleMessage(TcpClient client, JObject json)
     {
+        switch (json["id"].ToObject<string>())
+        {
+            case "username":
+            {
+                
+                break;
+            }
+        }
         Console.WriteLine("Received message");
         Console.WriteLine(json);
     }
